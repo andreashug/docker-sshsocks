@@ -2,6 +2,8 @@
 
 Minimalistic image with SSH server configured as socks proxy.
 
+[![Build Status](https://travis-ci.org/andreashug/docker-sshsocks.svg?branch=master)](https://travis-ci.org/andreashug/docker-sshsocks)
+
 Sometimes you need to change the IP of a domain but don't want to touch `/etc/hosts`. In this case, you can start this image with an added host, create a tunnel with SSH and configure your browser to use the container as socks proxy.
 
 ## Start Image
