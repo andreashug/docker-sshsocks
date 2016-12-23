@@ -9,7 +9,7 @@ Sometimes you need to change the IP of a domain but don't want to touch `/etc/ho
 ### One-liner for copy-paste
 
 ```
-docker run -d -p 127.0.0.1:2222:2222 --security-opt no-new-privileges --cap-drop ALL -v ${HOME}/.ssh/id_rsa.pub:/proxy/authorized_keys:ro --add-host example.com:127.0.0.1 --name sshsocks sshsocks
+docker run -d -p 127.0.0.1:2222:2222 --security-opt no-new-privileges --cap-drop ALL -v ${HOME}/.ssh/id_rsa.pub:/proxy/authorized_keys:ro --add-host example.com:127.0.0.1 --name sshsocks andreashug/sshsocks:latest
 ```
 
 ### Options Explained
