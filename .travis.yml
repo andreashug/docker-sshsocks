@@ -4,6 +4,7 @@ services:
 before_install:
   - ssh-keygen -f /tmp/id_rsa -P '' -t rsa
   - ssh-keygen -f /tmp/host_rsa -P '' -t rsa
+  - chmod 0444 /tmp/host_rsa
 
 install:
   - docker build -t sshsocks .
