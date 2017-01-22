@@ -11,7 +11,7 @@ elif [ -n "${HOST_RSA_KEY}" ]; then
 	chmod 0600 ${KEY_FILE_PATH}
 else
 	echo "Generate new host key"
-	ssh-keygen -q -N '' -t rsa -f ${KEY_FILE_PATH}
+	ssh-keygen -q -P '' -t rsa -f ${KEY_FILE_PATH}
 	chmod 0600 ${KEY_FILE_PATH}
 fi
 
