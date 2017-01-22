@@ -11,11 +11,11 @@ elif [ -n "${HOST_RSA_KEY}" ]; then
 	chmod 0600 ${KEY_FILE_PATH}
 else
 	echo "Generate new host key"
-	ssh-keygen -q -P '' -t rsa -f ${KEY_FILE_PATH}
+	ssh-keygen -P "" -t rsa -f ${KEY_FILE_PATH}
 	chmod 0600 ${KEY_FILE_PATH}
 fi
 
 FINGERPRINT=$(ssh-keygen -l -f ${KEY_FILE_PATH} | grep -o -E "[^: ]{43}")
 echo "Fingerprint: ${FINGERPRINT}"
 
-/usr/sbin/sshd -D -e -f /etc/ssh/sshd_config
+/usr/sbin/sshd -D -e -f /etc/ssh/sshd_config -v
