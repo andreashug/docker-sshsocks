@@ -13,6 +13,4 @@ script:
   - ssh -N -f -p 2222 -D 8822 -i /tmp/id_rsa tunnel@localhost -o StrictHostKeyChecking=no -o UserKnownHostsFile=/dev/null
   - docker ps --format {{.Names}} | grep -q sshsocks
   - curl -s -k -I --socks5-hostname 127.0.0.1:8822 https://example.com | grep -q Location:\ https://github.com/
-
-after_failure:
   - docker logs sshsocks

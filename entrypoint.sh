@@ -1,3 +1,5 @@
+#!/bin/sh
+
 KEY_FILE_PATH=/etc/ssh/ssh_host_rsa_key
 
 if [ -e "${KEY_FILE_PATH}" ]; then
