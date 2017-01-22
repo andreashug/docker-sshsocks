@@ -1,4 +1,4 @@
-FROM alpine:3.4
+FROM alpine:3.5
 
 RUN apk add --update --no-cache openssh && \
     adduser -D -s /sbin/nologin -H tunnel && \
