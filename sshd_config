@@ -1,18 +1,19 @@
 Port 2222
-PidFile /proxy/sshd.pid
+# PidFile /sshd/sshd.pid
 
-HostKey /proxy/ssh_host_rsa_key
-HostKey /proxy/ssh_host_dsa_key
-HostKey /proxy/ssh_host_ecdsa_key
-HostKey /proxy/ssh_host_ed25519_key
+ HostKey /etc/ssh/ssh_host_rsa_key
+# HostKey /sshd/ssh_host_dsa_key
+# HostKey /sshd/ssh_host_ecdsa_key
+# HostKey /sshd/ssh_host_ed25519_key
 
 PermitRootLogin no
 PasswordAuthentication no
 PubkeyAuthentication yes
-AuthorizedKeysFile	authorized_keys
+AuthorizedKeysFile	/etc/ssh/authorized_keys
 
-AllowUsers proxy
+AllowUsers tunnel
 AllowTcpForwarding yes
+GatewayPorts yes
 AllowAgentForwarding no
 AllowStreamLocalForwarding no
 X11Forwarding no
