@@ -7,7 +7,7 @@ before_install:
 
 install:
   - docker build -t sshsocks .
-  - docker run -d -p 127.0.0.1:2222:2222 --security-opt no-new-privileges --cap-drop ALL --cap-add SYS_CHROOT --cap-add SETGID --cap-add SETUID -v /tmp/id_rsa.pub:/etc/ssh/authorized_keys:ro --add-host example.com:192.30.253.112 --name sshsocks sshsocks
+  - docker run -d -p 127.0.0.1:2222:2222 -v /tmp/id_rsa.pub:/etc/ssh/authorized_keys:ro --add-host example.com:192.30.253.112 --name sshsocks sshsocks
 
 script:
   - ssh -v -N -f -p 2222 -D 8822 -i /tmp/id_rsa tunnel@localhost -o StrictHostKeyChecking=no -o UserKnownHostsFile=/dev/null
@@ -15,4 +15,5 @@ script:
   - curl -s -k -I --socks5-hostname 127.0.0.1:8822 https://example.com | grep -q Location:\ https://github.com/
 
 after_failure:
+  - docker ps -a
   - docker logs sshsocks
