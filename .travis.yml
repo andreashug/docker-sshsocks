@@ -10,6 +10,7 @@ install:
   - docker build -t sshsocks .
 
 script:
+  # Test socks proxy with generated host key
   - >
     docker run -d
     -p 127.0.0.1:2222:2222
@@ -30,17 +31,44 @@ script:
     -i /tmp/id_rsa
     -o StrictHostKeyChecking=no
     -o UserKnownHostsFile=/dev/null
-  - curl -s -k -I --socks5-hostname 127.0.0.1:8822 https://example.com | grep -q Location:\ https://github.com/
-  - ssh -S /tmp/ssh.sock tunnel@localhost -o StrictHostKeyChecking=no -o UserKnownHostsFile=/dev/null -O exit
-  - docker stop sshsocks
-  - docker rm sshsocks
-  - docker run -d -p 127.0.0.1:2222:2222 --security-opt no-new-privileges --cap-drop ALL --cap-add SYS_CHROOT --cap-add SETGID --cap-add SETUID -v /tmp/id_rsa.pub:/etc/ssh/authorized_keys:ro -v /tmp/host_rsa:/etc/ssh/ssh_host_rsa_key:ro --name sshsocks sshsocks
-  - sleep 1s
-  - ssh -M -S /tmp/ssh.sock -v -N -f -p 2222 -R 80:localhost:8000 -i /tmp/id_rsa tunnel@localhost -o StrictHostKeyChecking=no -o UserKnownHostsFile=/dev/null
-  - ssh -S /tmp/ssh.sock tunnel@localhost -o StrictHostKeyChecking=no -o UserKnownHostsFile=/dev/null -O exit
+  - >
+    curl -s -k -I
+    --socks5-hostname 127.0.0.1:8822
+    https://example.com
+    | grep -q Location:\ https://github.com/
+  - >
+    ssh tunnel@localhost
+    -S /tmp/ssh.sock -O exit
+    -o StrictHostKeyChecking=no
+    -o UserKnownHostsFile=/dev/null
   - docker stop sshsocks
   - docker rm sshsocks
 
-after_failure:
-  - docker ps -a
-  - docker logs sshsocks
+  # Test reverse tunnel with provided host key
+  - >
+    docker run -d
+    -p 127.0.0.1:2222:2222
+    -v /tmp/id_rsa.pub:/etc/ssh/authorized_keys:ro
+    -v /tmp/host_rsa:/etc/ssh/ssh_host_rsa_key:ro
+    --name sshsocks
+    --security-opt no-new-privileges
+    --cap-drop ALL
+    --cap-add SYS_CHROOT
+    --cap-add SETUID
+    --cap-add SETGID
+    sshsocks
+  - sleep 1s
+  - >
+    ssh tunnel@localhost
+    -f -M -S /tmp/ssh.sock
+    -N -p 2222 -R 80:localhost:8000
+    -i /tmp/id_rsa
+    -o StrictHostKeyChecking=no
+    -o UserKnownHostsFile=/dev/null
+  - >
+    ssh tunnel@localhost
+    -S /tmp/ssh.sock -O exit
+    -o StrictHostKeyChecking=no
+    -o UserKnownHostsFile=/dev/null
+  - docker stop sshsocks
+  - docker rm sshsocks
