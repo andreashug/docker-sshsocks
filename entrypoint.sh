@@ -18,4 +18,4 @@ fi
 FINGERPRINT=$(ssh-keygen -l -f ${KEY_FILE_PATH} | grep -o -E "[^: ]{43}")
 echo "Fingerprint: ${FINGERPRINT}"
 
-/usr/sbin/sshd -D -e -f /etc/ssh/sshd_config -v
+/usr/sbin/sshd -D -e -f /etc/ssh/sshd_config -d
