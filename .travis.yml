@@ -20,8 +20,6 @@ script:
   - sleep 1s
   - ssh -M -S /tmp/ssh.sock -v -N -f -p 2222 -R 80:localhost:8000 -i /tmp/id_rsa tunnel@localhost -o StrictHostKeyChecking=no -o UserKnownHostsFile=/dev/null
   - ssh -S /tmp/ssh.sock tunnel@localhost -o StrictHostKeyChecking=no -o UserKnownHostsFile=/dev/null -O exit
-  - docker stop sshsocks
-  - docker rm sshsocks
 
 after_failure:
   - docker ps -a
